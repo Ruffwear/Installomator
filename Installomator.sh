@@ -1510,6 +1510,81 @@ longversion)
 valuesfromarguments)
     # no action necessary, all values should be provided in arguments
     ;;
+    
+# ruffwear added
+silhouettestudio)
+    name="Silhouette Studio"
+    type="dmg"
+    downloadURL="https://dl.silhcdn.com/f7a931e3b870091f"
+    appNewVersion=""
+    expectedTeamID="TAX3B9PB9G"
+    ;;
+namechanger)
+    name="NameChanger"
+    type="zip"
+    downloadURL="https://mrrsoftware.com/Downloads/NameChanger/Updates/NameChanger-3_4_3.zip"
+    appNewVersion=""
+    expectedTeamID="9F4M7VMTU5"
+    ;;
+barcodeproducer)
+	name="Barcode Producer"
+    type="zip"
+    downloadURL="https://r.barcodeproducer.com/app/download_mac"
+    appNewVersion=""
+    expectedTeamID="XLRYTV33X4"
+    ;;
+zwift)
+	name="Zwift"
+    type="pkgInDmg"
+    downloadURL="https://cdn.zwift.com/app/ZwiftOSX.dmg"
+    appNewVersion=""
+    expectedTeamID="C2GM8Y9VFM"
+    ;;
+supporthelper)
+    name="SupportHelper"
+    type="pkg"
+    packageID="nl.root3.support.helper"
+    archiveName="SupportHelper[0-9.]*.pkg"
+    downloadURL="$(downloadURLFromGit root3nl SupportApp)"
+    appNewVersion="$(versionFromGit root3nl SupportApp)"
+    expectedTeamID="98LJ4XBGYK"
+    ;;
+breaktimer)
+    name="BreakTimer"
+    type="dmg"
+    downloadURL="https://github.com/tom-james-watson/breaktimer-app/releases/latest/download/BreakTimer.dmg"
+    appNewVersion=""
+    expectedTeamID="Z4W3B3QCM5"
+    ;;
+wavelink)
+    name="WaveLink"
+    type="pkg"
+    packageID="com.elgato.pkg.WaveLink"
+    downloadURL="https://edge.elgato.com/egc/macos/wavelink/1.9.2/WaveLink_1.9.2.1913.pkg"
+    appNewVersion=""
+    expectedTeamID="Y93VXCB8Q5"
+    ;;
+elgatocontrolcenter)
+    name="Elgato Control Center"
+    type="zip"
+    downloadURL="https://edge.elgato.com/egc/macos/eccm/1.5/ControlCenterMac-1.5.20289.app.zip"
+    appNewVersion=""
+    expectedTeamID="Y93VXCB8Q5"
+    ;;
+xtoolarm)
+    name="xTool Creative Space"
+    type="dmg"
+    downloadURL="https://res-us.makeblock.com/ms/updater/production/packages/28/235/1678160204427/xTool%20Creative%20Space-1.2.14-2023-03-06-13-34-59-arm64.dmg"
+    appNewVersion=""
+    expectedTeamID="XWN8AWFG9J"
+    ;;
+zalo)
+    name="Zalo"
+    type="dmg"
+    downloadURL="https://res-zaloapp-aka.zdn.vn/mac/ZaloSetup-universal-24.6.3.dmg"
+    appNewVersion=""
+    expectedTeamID="CVB6BX97VM"
+    ;;
 
 # label descriptions start here
 1password7)
