@@ -1544,7 +1544,7 @@ supporthelper)
     name="SupportHelper"
     type="pkg"
     packageID="nl.root3.support.helper"
-    archiveName="SupportHelper[0-9.]*.pkg"
+    archiveName="SupportHelper\.[0-9]+\.[0-9]+(\.[0-9]+)?\.pkg"
     downloadURL="$(downloadURLFromGit root3nl SupportApp)"
     appNewVersion="$(versionFromGit root3nl SupportApp)"
     expectedTeamID="98LJ4XBGYK"
