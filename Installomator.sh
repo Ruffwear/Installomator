@@ -1599,10 +1599,19 @@ zalo)
     loggedInUser=$(stat -f%Su /dev/console)
     userHome=$(eval echo ~$loggedInUser)
     
+    if [[ "$loggedInUser" == "root" || -z "$loggedInUser" ]]; then
+        echo "No logged-in user found. Exiting."
+        exit 1
+    fi
+    
     echo "Running as logged-in user: $loggedInUser"
     
-    # Run the Node.js script as the logged-in user
+    # Get the global npm root path
+    npmGlobalPath=$(npm root -g)
+    
+    # Run the Node.js script as the logged-in user with NODE_PATH set
     downloadURL=$(sudo -u "$loggedInUser" -H bash -c "
+        export NODE_PATH=$npmGlobalPath
         export PATH=$PATH:/usr/local/bin
         node '$nodeScript'
     ")
@@ -1623,7 +1632,7 @@ zalo)
     fi
     
     appName="Zalo.app"
-    expectedTeamID="CVB6BX97VM"
+    expectedTeamID="CVB6BX97VM" # Placeholder Team ID; replace if needed.
   ;;
 
 # label descriptions start here
