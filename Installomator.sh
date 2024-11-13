@@ -1606,13 +1606,8 @@ zalo)
     
     echo "Running as logged-in user: $loggedInUser"
     
-    # Get the global npm root path
-    npmGlobalPath=$(npm root -g)
-    
     # Run the Node.js script as the logged-in user with NODE_PATH set
     downloadURL=$(sudo -u "$loggedInUser" -H bash -c "
-        export NODE_PATH=$npmGlobalPath
-        export PATH=$PATH:/usr/local/bin
         node '$nodeScript'
     ")
     
