@@ -1592,19 +1592,25 @@ sketchup2024)
 zalo)
     name="Zalo"
     type="dmg"
-    # Set the NODE_PATH to include global modules
-    export NODE_PATH=$(npm root -g)
-    
     # Path to the Node.js script that retrieves the latest download URL
     nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
     
-    # Use the Node.js script to get the download URL
-    downloadURL=$(/usr/local/bin/node "$nodeScript")
+    # Get the currently logged-in user
+    loggedInUser=$(stat -f%Su /dev/console)
+    userHome=$(eval echo ~$loggedInUser)
+    
+    echo "Running as logged-in user: $loggedInUser"
+    
+    # Run the Node.js script as the logged-in user
+    downloadURL=$(sudo -u "$loggedInUser" -H bash -c "
+        export PATH=$PATH:/usr/local/bin
+        node '$nodeScript'
+    ")
     
     # If the downloadURL is empty, output an error and exit
     if [[ -z "$downloadURL" ]]; then
-      echo "Failed to retrieve the download URL for Zalo."
-      exit 1
+        echo "Failed to retrieve the download URL for Zalo."
+        exit 1
     fi
     
     # Extract version number from the download URL (e.g., 24.11.1 from ZaloSetup-universal-24.11.1.dmg)
@@ -1612,12 +1618,12 @@ zalo)
     
     # If appNewVersion extraction fails, output an error and exit
     if [[ -z "$appNewVersion" ]]; then
-      echo "Failed to extract the app version for Zalo."
-      exit 1
+        echo "Failed to extract the app version for Zalo."
+        exit 1
     fi
     
     appName="Zalo.app"
-    expectedTeamID="CVB6BX97VM" # Placeholder Team ID; replace if needed.
+    expectedTeamID="CVB6BX97VM"
   ;;
 
 # label descriptions start here
