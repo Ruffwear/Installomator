@@ -1592,6 +1592,9 @@ sketchup2024)
 zalo)
     name="Zalo"
     type="dmg"
+    # Set the NODE_PATH to include global modules
+    export NODE_PATH=$(npm root -g)
+    
     # Path to the Node.js script that retrieves the latest download URL
     nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
     
