@@ -1611,7 +1611,7 @@ zalo)
     fi
     
     # Extract version number from the download URL (e.g., 24.11.1 from ZaloSetup-universal-24.11.1.dmg)
-    appNewVersion=$(echo "$downloadURL" | /usr/bin/sed 's/.*-\([0-9.]*\)\.dmg/\1/')
+    appNewVersion=$(echo "$downloadURL" | sed 's/.*-\([0-9.]*\)\.dmg/\1/')
     
     # If appNewVersion extraction fails, output an error and exit
     if [[ -z "$appNewVersion" ]]; then
