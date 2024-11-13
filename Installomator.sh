@@ -1592,9 +1592,10 @@ sketchup2024)
 zalo)
     name="Zalo"
     type="dmg"
+    echo "HELLO HELLO HELLO"
     # Export the NODE_PATH to include global npm modules
     export NODE_PATH=$(/usr/local/bin/npm root -g)
-    echo "$NODE_PATH"
+    echo "NODE PATH IS $NODE_PATH"
     # Path to the Node.js script that retrieves the latest download URL
     nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
     
