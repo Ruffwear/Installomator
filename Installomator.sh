@@ -1592,10 +1592,10 @@ sketchup2024)
 zalo)
     name="Zalo"
     type="dmg"
-    echo "HELLO HELLO HELLO"
     echo "Current PATH: $PATH"
     # Export the NODE_PATH to include global npm modules
     export PATH=/usr/local/bin
+    echo "Current PATH: $PATH"
     export NODE_PATH=$(/usr/local/bin/npm root -g)
     echo "NODE PATH IS $NODE_PATH"
     # Path to the Node.js script that retrieves the latest download URL
