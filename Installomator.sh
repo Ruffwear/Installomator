@@ -1593,7 +1593,7 @@ zalo)
     name="Zalo"
     type="dmg"
     # Path to the Node.js script that retrieves the latest download URL
-    nodeScript="/Users/kevinbarnum/Desktop/zalo.js"
+    nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
     
     # Use the Node.js script to get the download URL
     downloadURL=$(/usr/local/bin/node "$nodeScript")
