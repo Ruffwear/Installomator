@@ -1579,13 +1579,6 @@ xtoolarm)
     appNewVersion=""
     expectedTeamID="XWN8AWFG9J"
     ;;
-zalo)
-    name="Zalo"
-    type="dmg"
-    downloadURL="https://res-zaloapp-aka.zdn.vn/mac/ZaloSetup-universal-24.6.3.dmg"
-    appNewVersion=""
-    expectedTeamID="CVB6BX97VM"
-    ;;
 sketchup2024)
     name="SketchUp 2024"
     type="dmg"
@@ -1596,6 +1589,33 @@ sketchup2024)
     versionKey="CFBundleVersion"
     expectedTeamID="J8PVMCY7KL"
     ;;
+zalo)
+    name="Zalo"
+    type="dmg"
+    # Path to the Node.js script that retrieves the latest download URL
+    nodeScript="/Users/kevinbarnum/Desktop/zalo.js"
+    
+    # Use the Node.js script to get the download URL
+    downloadURL=$(/usr/local/bin/node "$nodeScript")
+    
+    # If the downloadURL is empty, output an error and exit
+    if [[ -z "$downloadURL" ]]; then
+      echo "Failed to retrieve the download URL for Zalo."
+      exit 1
+    fi
+    
+    # Extract version number from the download URL (e.g., 24.11.1 from ZaloSetup-universal-24.11.1.dmg)
+    appNewVersion=$(echo "$downloadURL" | sed 's/.*-\([0-9.]*\)\.dmg/\1/')
+    
+    # If appNewVersion extraction fails, output an error and exit
+    if [[ -z "$appNewVersion" ]]; then
+      echo "Failed to extract the app version for Zalo."
+      exit 1
+    fi
+    
+    appName="Zalo.app"
+    expectedTeamID="CVB6BX97VM" # Placeholder Team ID; replace if needed.
+  ;;
 
 # label descriptions start here
 1password7)
