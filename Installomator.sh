@@ -1516,8 +1516,14 @@ valuesfromarguments)
 silhouettestudio)
     name="Silhouette Studio"
     type="dmg"
-    downloadURL="https://dl.silhcdn.com/f7a931e3b870091f"
-    appNewVersion=""
+    appNewVersion=$(curl -fs -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" 'https://www.silhouetteamerica.com/software/release-notes/id/3' | grep -o 'id="[0-9]\+\.[0-9]\+\.[0-9]\+"' | sed -e 's/id="//' -e 's/"//' | head -n 1)
+    releaseURL="https://d62nvtdcnsm38.cloudfront.net/files/softwares/ss/SS_V${appNewVersion}_M6R.dmg"
+    betaURL="https://d62nvtdcnsm38.cloudfront.net/files/softwares/ss/SS_V${appNewVersion}_M6B.dmg"
+    if curl --output /dev/null --silent --head --fail "$releaseURL"; then
+        downloadURL="$releaseURL"
+    else
+        downloadURL="$betaURL"
+    fi
     expectedTeamID="TAX3B9PB9G"
     ;;
 namechanger)
@@ -1541,22 +1547,44 @@ zwift)
     appNewVersion=""
     expectedTeamID="C2GM8Y9VFM"
     ;;
-supporthelper)
-    name="SupportHelper"
-    type="pkg"
-    packageID="nl.root3.support.helper"
-    archiveName="SupportHelper\.[0-9]+\.[0-9]+(\.[0-9]+)?\.pkg"
-    downloadURL="$(downloadURLFromGit root3nl SupportApp)"
-    appNewVersion="$(versionFromGit root3nl SupportApp)"
-    expectedTeamID="98LJ4XBGYK"
-    ;;
 breaktimer)
     name="BreakTimer"
     type="dmg"
-    downloadURL="https://github.com/tom-james-watson/breaktimer-app/releases/latest/download/BreakTimer.dmg"
-    appNewVersion=""
+    downloadURL=$(downloadURLFromGit tom-james-watson breaktimer-app)
+    appNewVersion=$(versionFromGit tom-james-watson breaktimer-app)
     expectedTeamID="Z4W3B3QCM5"
     ;;
+sketchup2024)
+    name="SketchUp 2024"
+    type="dmg"
+    downloadURL="$(curl -s https://www.sketchup.com/en/download/all | grep -o 'https://download.sketchup.com/SketchUp-2024[^"]*.dmg')"
+    folderName="SketchUp 2024"
+    appName="${folderName}/SketchUp.app"
+    appNewVersion=$(echo "$downloadURL" | grep -o 'SketchUp-20[0-9][0-9]-[0-9]*-[0-9]*' | awk -F '-' '{year=substr($2, 3, 2); if (year >= 24) printf "%d.0.%s", year, $NF; else printf "%d.%s", year+2000, $NF}')
+    versionKey="CFBundleVersion"
+    expectedTeamID="J8PVMCY7KL"
+    ;;
+zalo)
+    name="Zalo"
+    type="dmg"
+    export PATH=$PATH:/usr/local/bin
+    echo "Current PATH: $PATH"
+    export NODE_PATH=$(/usr/local/bin/npm root -g)
+    echo "NODE PATH IS $NODE_PATH"
+    nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
+    downloadURL=$(/usr/local/bin/node "$nodeScript")
+    if [[ -z "$downloadURL" ]]; then
+      echo "Failed to retrieve the download URL for Zalo."
+      exit 1
+    fi
+    appNewVersion=$(echo "$downloadURL" | sed 's/.*-\([0-9.]*\)\.dmg/\1/')
+    if [[ -z "$appNewVersion" ]]; then
+      echo "Failed to extract the app version for Zalo."
+      exit 1
+    fi
+    appName="Zalo.app"
+    expectedTeamID="CVB6BX97VM" 
+  ;;
 wavelink)
     name="WaveLink"
     type="pkg"
@@ -1579,48 +1607,6 @@ xtoolarm)
     appNewVersion=""
     expectedTeamID="XWN8AWFG9J"
     ;;
-sketchup2024)
-    name="SketchUp 2024"
-    type="dmg"
-    downloadURL="$(curl -s https://www.sketchup.com/en/download/all | grep -o 'https://download.sketchup.com/SketchUp-2024[^"]*.dmg')"
-    folderName="SketchUp 2024"
-    appName="${folderName}/SketchUp.app"
-    appNewVersion=$(echo "$downloadURL" | grep -o 'SketchUp-20[0-9][0-9]-[0-9]*-[0-9]*' | awk -F '-' '{year=substr($2, 3, 2); if (year >= 24) printf "%d.0.%s", year, $NF; else printf "%d.%s", year+2000, $NF}')
-    versionKey="CFBundleVersion"
-    expectedTeamID="J8PVMCY7KL"
-    ;;
-zalo)
-    name="Zalo"
-    type="dmg"
-    # Export the NODE_PATH to include global npm modules
-    export PATH=$PATH:/usr/local/bin
-    echo "Current PATH: $PATH"
-    export NODE_PATH=$(/usr/local/bin/npm root -g)
-    echo "NODE PATH IS $NODE_PATH"
-    # Path to the Node.js script that retrieves the latest download URL
-    nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
-    
-    # Use the Node.js script to get the download URL
-    downloadURL=$(/usr/local/bin/node "$nodeScript")
-    
-    # If the downloadURL is empty, output an error and exit
-    if [[ -z "$downloadURL" ]]; then
-      echo "Failed to retrieve the download URL for Zalo."
-      exit 1
-    fi
-    
-    # Extract version number from the download URL (e.g., 24.11.1 from ZaloSetup-universal-24.11.1.dmg)
-    appNewVersion=$(echo "$downloadURL" | sed 's/.*-\([0-9.]*\)\.dmg/\1/')
-    
-    # If appNewVersion extraction fails, output an error and exit
-    if [[ -z "$appNewVersion" ]]; then
-      echo "Failed to extract the app version for Zalo."
-      exit 1
-    fi
-    
-    appName="Zalo.app"
-    expectedTeamID="CVB6BX97VM" 
-  ;;
 
 # label descriptions start here
 1password7)
