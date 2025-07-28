@@ -1,0 +1,84 @@
+# ruffwear added
+silhouettestudio)
+    name="Silhouette Studio"
+    type="dmg"
+    appNewVersion=$(curl -fs -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" 'https://www.silhouetteamerica.com/software/release-notes/id/3' | grep -o 'id="[0-9]\+\.[0-9]\+\.[0-9]\+"' | sed -e 's/id="//' -e 's/"//' | head -n 1)
+    releaseURL="https://d62nvtdcnsm38.cloudfront.net/files/softwares/ss/SS_V${appNewVersion}.001_M6R.dmg"
+    betaURL="https://d62nvtdcnsm38.cloudfront.net/files/softwares/ss/SS_V${appNewVersion}_M6B.dmg"
+    if curl --output /dev/null --silent --head --fail "$releaseURL"; then
+        downloadURL="$releaseURL"
+    else
+        downloadURL="$betaURL"
+    fi
+    expectedTeamID="TAX3B9PB9G"
+    ;;
+namechanger)
+    name="NameChanger"
+    type="zip"
+    downloadURL="https://mrrsoftware.com/Downloads/NameChanger/Updates/NameChanger-3_4_3.zip"
+    appNewVersion=""
+    expectedTeamID="9F4M7VMTU5"
+    ;;
+barcodeproducer)
+	name="Barcode Producer"
+    type="zip"
+    downloadURL="https://r.barcodeproducer.com/app/download_mac"
+    appNewVersion=""
+    expectedTeamID="XLRYTV33X4"
+    ;;
+zwift)
+	name="Zwift"
+    type="pkgInDmg"
+    downloadURL="https://cdn.zwift.com/app/ZwiftOSX.dmg"
+    appNewVersion=""
+    expectedTeamID="C2GM8Y9VFM"
+    ;;
+breaktimer)
+    name="BreakTimer"
+    type="dmg"
+    downloadURL=$(downloadURLFromGit tom-james-watson breaktimer-app)
+    appNewVersion=$(versionFromGit tom-james-watson breaktimer-app)
+    expectedTeamID="Z4W3B3QCM5"
+    ;;
+sketchup2024)
+    name="SketchUp 2024"
+    type="dmg"
+    downloadURL="$(curl -s https://www.sketchup.com/en/download/all | grep -o 'https://download.sketchup.com/SketchUp-2024[^"]*.dmg')"
+    folderName="SketchUp 2024"
+    appName="${folderName}/SketchUp.app"
+    appNewVersion=$(echo "$downloadURL" | grep -o 'SketchUp-20[0-9][0-9]-[0-9]*-[0-9]*' | awk -F '-' '{year=substr($2, 3, 2); if (year >= 24) printf "%d.0.%s", year, $NF; else printf "%d.%s", year+2000, $NF}')
+    versionKey="CFBundleVersion"
+    expectedTeamID="J8PVMCY7KL"
+    ;;
+zalo)
+    name="Zalo"
+    type="dmg"
+    export PATH=$PATH:/usr/local/bin
+    export NODE_PATH=$(/usr/local/bin/npm root -g)
+    nodeScript="/Library/Application Support/Ruffwear/zalogetversion.js"
+    downloadURL=$(/usr/local/bin/node "$nodeScript")
+    appNewVersion=$(echo "$downloadURL" | sed 's/.*-\([0-9.]*\)\.dmg/\1/')
+    expectedTeamID="CVB6BX97VM" 
+  ;;
+wavelink)
+    name="WaveLink"
+    type="pkg"
+    packageID="com.elgato.pkg.WaveLink"
+    downloadURL="https://edge.elgato.com/egc/macos/wavelink/1.9.2/WaveLink_1.9.2.1913.pkg"
+    appNewVersion=""
+    expectedTeamID="Y93VXCB8Q5"
+    ;;
+elgatocontrolcenter)
+    name="Elgato Control Center"
+    type="zip"
+    downloadURL="https://edge.elgato.com/egc/macos/eccm/1.5/ControlCenterMac-1.5.20289.app.zip"
+    appNewVersion=""
+    expectedTeamID="Y93VXCB8Q5"
+    ;;
+xtoolarm)
+    name="xTool Creative Space"
+    type="dmg"
+    downloadURL="https://res-us.makeblock.com/ms/updater/production/packages/28/235/1678160204427/xTool%20Creative%20Space-1.2.14-2023-03-06-13-34-59-arm64.dmg"
+    appNewVersion=""
+    expectedTeamID="XWN8AWFG9J"
+    ;;
