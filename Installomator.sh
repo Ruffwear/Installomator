@@ -1817,13 +1817,28 @@ adobecreativeclouddesktop)
         printlog "################## End $APPLICATION \n\n" INFO
         exit 75
     fi
-    if [[ "$(arch)" == "arm64" ]]; then
-        downloadURL=$(curl -fs "https://helpx.adobe.com/in/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html" | grep -o 'https.*macarm64.*dmg' | head -1 | cut -d '"' -f1)
-    else
-        downloadURL=$(curl -fs "https://helpx.adobe.com/in/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html" | grep -o 'https.*osx10.*dmg' | head -1 | cut -d '"' -f1)
-    fi
-    #appNewVersion=$(curl -fs "https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html" | grep "mandatory" | head -1 | grep -o "Version *.* released" | cut -d " " -f2)
-    appNewVersion=$(echo $downloadURL | grep -o '[^x]*$' | cut -d '.' -f 1 | sed 's/_/\./g')
+    # Always use the global HelpX page (avoid region-specific /in/ variant)
+helpxURL="https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html"
+
+if [[ "$(arch)" == "arm64" ]]; then
+    downloadURL=$(curl -fsL "$helpxURL" \
+      | grep -Eo 'https://ccmdl\.adobe\.com[^"]*macarm64[^"]*\.dmg' \
+      | head -1)
+else
+    downloadURL=$(curl -fsL "$helpxURL" \
+      | grep -Eo 'https://ccmdl\.adobe\.com[^"]*osx10[^"]*\.dmg' \
+      | head -1)
+fi
+
+# Fail early if we didn’t get a URL
+if [[ -z "$downloadURL" ]]; then
+    printlog "Failed to locate Adobe CC Desktop direct link on HelpX." ERROR
+    exit 9
+fi
+
+# Derive a version from the filename, e.g. ACCCx6_8_0_821.dmg -> 6.8.0.821
+appNewVersion=$(echo "$downloadURL" \
+  | sed -E 's#.*ACCCx([0-9_]+)\.dmg#\1#; s#_#.#g')
     targetDir="/Applications/Utilities/Adobe Creative Cloud/ACC/"
     installerTool="Install.app"
     CLIInstaller="Install.app/Contents/MacOS/Install"
