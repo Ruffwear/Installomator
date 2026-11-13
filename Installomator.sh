@@ -1647,10 +1647,12 @@ metaedits)
     if [[ $(arch) == "i386" ]]; then
         cleanupAndExit 95 "Edits requires Apple Silicon (arm64) Macs." ERROR
     fi
-    editsPage=$(curl -fsL -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15" "https://edits.instagram.com/desktop" | sed -e 's#\\/#/#g' -e 's/&amp;/\&/g')
-    downloadURL=$(echo "$editsPage" | grep -oE 'https://[^"'\''<> ]*fbcdn\.net/[^"'\''<> ]*/Edits-[0-9.]+\.dmg[^"'\''<> ]*' | head -n 1)
-    appNewVersion=$(echo "$downloadURL" | grep -oE 'Edits-[0-9.]+\.dmg' | sed -E 's/^Edits-//; s/\.dmg$//' | cut -d. -f1-3)
+    editsPage=$(curl -fsL -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15" "https://edits.instagram.com/desktop" \
+        | sed -e 's#\\/#/#g' -e 's/&amp;/\&/g' -e 's/\\u0026/\&/g' -e 's/\\u0025/%/g')
+    downloadURL=$(echo "$editsPage" | grep -oE 'https://[^"'\''<> ]*fbcdn\.net/[^"'\''<> ]*\.dmg[^"'\''<> ]*' | head -n 1)
     [[ -n "$downloadURL" ]] || cleanupAndExit 14 "Could not find the Edits download URL." ERROR
+    # Filename no longer contains a version; leave appNewVersion unset so
+    # Installomator compares against the version inside the downloaded DMG.
     expectedTeamID="777W53UFB2"
     ;;
 
